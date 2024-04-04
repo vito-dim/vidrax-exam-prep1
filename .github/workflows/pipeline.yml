@@ -48,3 +48,15 @@ jobs:
         run: npm run start &
       - name: Run UI tests
         run: npm run test:unit
+
+  deploy-app:
+    needs: run-ui-tests
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy FE in production
+        uses: JorgeLNJunior/render-deploy@v1.4.4
+        with:
+          service_id: ${{ secrets.RENDER_SERVICE_ID }}
+          api_key: ${{ secrets.RENDER_KEY }}
+          wait_deploy: true
